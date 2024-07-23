@@ -1,0 +1,27 @@
+﻿module fixed_width_lbit_direct_truncation_adder_tree (
+input wire [7:0] A0, A1, A2, A3, A4, A5, A6, A7, 
+output reg [7:0] sum
+);
+
+// Stage 1: Perform 1-bit addition for each pair of inputs 
+wire [3:0] sum_stagel;
+assign sum stage1[0] = A0[0] + A1[0];
+assign sum stage1[1] = A2[0] + A3[0];
+assign sum_stage1[2] = A4[0] + A5[0];
+assign sum_stage1[3] = A6[0] + A7[0];
+
+// Stage 2: Further add the intermediate sums
+wire [1:0] sum stage2;
+assign sum stage2[0] = sum_stage1[0] + sum_stage1[1]; 
+assign sum stage2[1] = sum_stage1[2] + sum_stage1[3];
+
+// Stage 3: Final addition with 1-bit truncation
+wire [0:0] sum_stage3;
+assign sum stage3 [0] = sum stage2[0] + sum stage2[1];
+
+// Assign the truncated sum to the output
+always @* begin
+  sum = sum_stage3[0]; // Take only the least significant bit
+ end
+
+endmodule

@@ -1,0 +1,33 @@
+﻿module full width adder tree (
+  input [7:0] A0, A1, A2, A3, A4, A5, A6, A7,
+  output [10:0] sum // Adjusted width to accommodate full sum without overflow
+);
+
+wire [8:0] sum1, sum2, sum3, sum4; // Intermediate sums, assuming potential overflow from 8-bit sum
+wire [9:0] sum5, sum6; // Further adding may increase the bit-width
+// First stage of addition
+assign sum1 = A0 + A1; 
+assign sum2 = A2 + A3; 
+assign sum3 = A4 + A5; 
+assign sum4 = A6+ A7; 
+// Second stage of addition 
+assign sum5 = sum1 + sum2; 
+assign sum6 = sum3+ sum4; 
+// Final addition stage
+assign sum = sum5+ sum6; 
+endmodule
+
+module fixed_width_post_truncated_adder_tree (
+  input [7:0] A0, A1, A2, A3, A4, A5, A6, A7,
+  output [7:0] sum // Truncated sum output
+);
+
+wire [10:0] full sum; // Full width from a non-truncated adder tree 
+// Instantiate the full-width adder tree
+full_width_adder_tree fwa (
+.AO (AO), .A1 (A1),.A2 (A2), .A3 (A3),
+.A4 (A4), A5 (A5), .A6 (A6), .A7 (A7), 
+.sum(full_sum)
+);
+// Truncate the output to the required width
+assign sum = full_sum [7:0]; // Taking the least significant bits only 32 endmodule
